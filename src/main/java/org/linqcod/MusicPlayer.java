@@ -1,29 +1,39 @@
 package org.linqcod;
 
-public class MusicPlayer {
-    private Music music;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-    private String name;
+import java.util.ArrayList;
+import java.util.List;
+
+@Component
+public class MusicPlayer {
+    private List<Music> musicPlaylist;
+
+    @Value("${musicPlayer.model}")
+    private String model;
+    @Value("${musicPlayer.volume}")
     private float volume;
 
     public MusicPlayer() {
-
+        initDefaultPlaylist();
     }
 
-    public void setMusic(Music music) {
-        this.music = music;
+    public void addMusicToPlaylist(Music music) {
+        musicPlaylist.add(music);
     }
 
-    public Music getMusic() {
-        return this.music;
+    public void initDefaultPlaylist() {
+        musicPlaylist = new ArrayList<>();
+
+        musicPlaylist.add(new Music("jude", "awdfg", Genre.ROCK));
+        musicPlaylist.add(new Music("adwwdw", "vafwwf", Genre.JAZZ));
+        musicPlaylist.add(new Music("awdfeg", "afegh", Genre.CLASSICAL));
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return this.name;
+    public String getModel() {
+        return this.model;
     }
 
     public void setVolume(float volume) {
@@ -35,6 +45,8 @@ public class MusicPlayer {
     }
 
     public void playMusic() {
-        System.out.printf("Now is playing music of type: %s\n", music.getType());
+        for (Music music: musicPlaylist) {
+            System.out.printf("Playing song: %s\n", music.getName());
+        }
     }
 }
